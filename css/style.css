@@ -1,0 +1,468 @@
+/* ==========================================================================
+   TOKENS
+   ========================================================================== */
+:root {
+  --bg:          #15171A;   /* gallery wall, dark */
+  --bg-card:     #1D2020;   /* card surface, slightly lifted */
+  --ink:         #F2EDE4;   /* warm off-white text */
+  --muted:       #9A968D;   /* secondary text */
+  --accent:      #d6a9c9;   /* museum plaque brass */
+  --accent-soft: #6b5464;
+  --hairline:    #33373A;
+  --danger:      #B23A2E;
+
+  --font-display: 'Fraunces', serif;
+  --font-body:    'Inter', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  --max-width: 1200px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+/* Visible keyboard focus everywhere */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px clamp(20px, 5vw, 64px);
+  background: rgba(21, 23, 26, 0.88);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.wordmark-sub {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.site-nav {
+  display: flex;
+  gap: clamp(16px, 3vw, 32px);
+}
+
+.site-nav a {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--muted);
+  transition: color 0.15s ease;
+}
+
+.site-nav a:hover { color: var(--ink); }
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+.hero {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: clamp(64px, 12vw, 140px) clamp(20px, 5vw, 64px) clamp(48px, 8vw, 96px);
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 20px;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  line-height: 1.05;
+  margin: 0 0 24px;
+  max-width: 14ch;
+}
+
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 46ch;
+  margin: 0;
+}
+
+/* ==========================================================================
+   SECTION HEADING (shared)
+   ========================================================================== */
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 64px);
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: 18px;
+}
+
+.section-heading h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.section-count {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   GALLERY GRID
+   ========================================================================== */
+.gallery-section {
+  padding: clamp(48px, 8vw, 80px) 0 clamp(64px, 10vw, 120px);
+}
+
+/*
+  Masonry grid.
+  True masonry (variable-width AND variable-height tiles with no leftover
+  gaps) isn't something CSS Grid can do reliably on its own — its built-in
+  "dense" auto-placement is a row-major heuristic and can still strand a
+  narrow column empty under a short card. So layout math lives in JS
+  (see layoutMasonry() in script.js): it bin-packs each card into the
+  shortest available column slot and positions it with absolute
+  left/top. The rules below are just the plumbing for that:
+  - before JS runs, cards fall back to a plain stacked block layout
+  - .gallery-grid.masonry-ready is added once JS takes over
+*/
+.gallery-grid {
+  position: relative;
+  max-width: var(--max-width);
+  margin: 40px auto 0;
+  padding: 0 clamp(20px, 5vw, 64px);
+  --grid-gap: clamp(20px, 3vw, 32px);
+}
+
+.painting-card {
+  display: block;
+  width: 100%;
+  margin-bottom: var(--grid-gap);
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.gallery-grid.masonry-ready .painting-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-bottom: 0;
+  /* width/left/top are all set inline by layoutMasonry() per card */
+}
+
+.painting-frame {
+  background: var(--bg-card);
+  padding: 14px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.painting-card:hover .painting-frame,
+.painting-card:focus-visible .painting-frame {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.7);
+}
+
+.painting-frame img {
+  display: block;
+  width: 100%;
+  height: auto;   /* natural aspect ratio, full painting always visible */
+}
+
+/* Museum wall label — the signature element */
+.painting-label {
+  margin-top: 14px;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.painting-label-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.painting-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.painting-accession {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.painting-meta {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 6px;
+  letter-spacing: 0.01em;
+}
+
+.painting-status {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid var(--hairline);
+}
+
+.painting-status.status-available { color: var(--accent); border-color: var(--accent-soft); }
+.painting-status.status-sold      { color: var(--muted); }
+.painting-status.status-inquire   { color: var(--ink); border-color: var(--hairline); }
+
+/* ==========================================================================
+   ABOUT / CONTACT
+   ========================================================================== */
+.about-section,
+.contact-section {
+  padding: clamp(48px, 8vw, 80px) 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.about-content,
+.contact-content {
+  max-width: var(--max-width);
+  margin: 24px auto 0;
+  padding: 0 clamp(20px, 5vw, 64px);
+  max-width: 62ch;
+}
+
+.about-content p,
+.contact-content p {
+  color: var(--muted);
+  margin: 0 0 14px;
+}
+
+.about-content code,
+.contact-content code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--bg-card);
+  padding: 2px 6px;
+  border: 1px solid var(--hairline);
+}
+
+.contact-email {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-soft);
+  padding-bottom: 2px;
+  margin: 4px 0 16px;
+}
+
+.contact-email:hover { color: var(--ink); border-color: var(--ink); }
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.site-footer {
+  border-top: 1px solid var(--hairline);
+  padding: 28px clamp(20px, 5vw, 64px) 40px;
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+/* ==========================================================================
+   LIGHTBOX
+   ========================================================================== */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  background: rgba(10, 11, 12, 0.96);
+  padding: clamp(16px, 4vw, 48px);
+}
+
+.lightbox.is-open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-inner {
+  width: 100%;
+  max-width: 1100px;
+  max-height: 100%;
+  display: flex;
+  gap: clamp(20px, 3vw, 48px);
+  align-items: stretch;
+}
+
+.lightbox-image-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8);
+}
+
+.lightbox-label {
+  flex: 0 0 260px;
+  align-self: center;
+  font-family: var(--font-mono);
+  color: var(--muted);
+  border-left: 1px solid var(--hairline);
+  padding-left: clamp(16px, 3vw, 32px);
+}
+
+.lightbox-label h3 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+
+.lightbox-label p {
+  font-size: 0.8rem;
+  line-height: 1.7;
+  margin: 0 0 8px;
+}
+
+.lightbox-label .lightbox-accession {
+  color: var(--accent);
+  font-size: 0.7rem;
+  margin-bottom: 16px;
+}
+
+.lightbox-label .lightbox-desc {
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin: 16px 0 0;
+}
+
+.lightbox-close,
+.lightbox-nav {
+  position: absolute;
+  background: none;
+  border: 1px solid var(--hairline);
+  color: var(--ink);
+  font-size: 1.6rem;
+  line-height: 1;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.lightbox-close:hover,
+.lightbox-nav:hover { border-color: var(--accent); color: var(--accent); }
+
+.lightbox-close { top: clamp(12px, 3vw, 32px); right: clamp(12px, 3vw, 32px); }
+.lightbox-prev  { left: clamp(12px, 3vw, 32px); top: 50%; transform: translateY(-50%); }
+.lightbox-next  { right: clamp(12px, 3vw, 32px); top: 50%; transform: translateY(-50%); }
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 720px) {
+  .site-nav { gap: 14px; }
+
+  .lightbox-inner {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .lightbox-image { max-height: 50vh; }
+
+  .lightbox-label {
+    flex: none;
+    border-left: none;
+    border-top: 1px solid var(--hairline);
+    padding-left: 0;
+    padding-top: 16px;
+  }
+
+  .lightbox-prev, .lightbox-next { top: auto; bottom: 12px; transform: none; }
+  .lightbox-prev { left: 12px; }
+  .lightbox-next { right: 12px; }
+}
