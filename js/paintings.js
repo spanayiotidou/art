@@ -24,7 +24,7 @@
 const PAINTINGS = [
   {
     id: "001",
-    title: "Ember Field",
+    title: "Light",
     year: "2024",
     medium: "Oil on canvas",
     dimensions: "100 x 120 cm",
