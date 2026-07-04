@@ -19,6 +19,10 @@
   const btnPrev = document.getElementById("lightbox-prev");
   const btnNext = document.getElementById("lightbox-next");
 
+  const navToggle = document.getElementById("nav-toggle");
+  const siteNav = document.getElementById("site-nav");
+  const navScrim = document.getElementById("nav-scrim");
+
   let currentIndex = 0;
 
   const STATUS_LABEL = {
@@ -31,46 +35,13 @@
     return [p.medium, p.dimensions, p.year].filter(Boolean).join(" · ");
   }
 
-  /*
-    Reads the leading "W × H in" pair out of a dimensions string like
-    '30 × 40 in (76 × 102 cm)' and returns the area (width * height).
-    Used only to decide relative tile size in the grid — it doesn't need
-    to be exact, just consistent across your entries.
-  */
-  function parseArea(dimensions) {
-    if (!dimensions) return null;
-    const match = String(dimensions).match(/([\d.]+)\s*[×x]\s*([\d.]+)/);
-    if (!match) return null;
-    const w = parseFloat(match[1]);
-    const h = parseFloat(match[2]);
-    if (isNaN(w) || isNaN(h)) return null;
-    return w * h;
-  }
-
-  /*
-    Picks roughly the largest third of the collection (by parsed area) to
-    render as double-width tiles, so bigger paintings actually take up
-    more visual space in the grid instead of every tile being identical.
-  */
-  function getLargeTileIds() {
-    const withArea = PAINTINGS
-      .map((p) => ({ id: p.id, area: parseArea(p.dimensions) }))
-      .filter((p) => p.area !== null)
-      .sort((a, b) => b.area - a.area);
-
-    if (withArea.length < 3) return new Set();
-
-    const largeCount = Math.max(1, Math.round(withArea.length / 3));
-    return new Set(withArea.slice(0, largeCount).map((p) => p.id));
-  }
-
   function renderGrid() {
     grid.innerHTML = "";
-    const largeTileIds = getLargeTileIds();
 
     PAINTINGS.forEach((p, index) => {
       const card = document.createElement("button");
-      card.className = "painting-card" + (largeTileIds.has(p.id) ? " is-large" : "");
+      const isLarge = (p.size || "").toLowerCase() === "large";
+      card.className = "painting-card" + (isLarge ? " is-large" : "");
       card.type = "button";
       card.setAttribute("aria-label", "View " + p.title + ", " + p.year);
 
@@ -80,7 +51,7 @@
 
       card.innerHTML =
         '<div class="painting-frame">' +
-          '<img src="' + p.image + '" alt="' + escapeAttr(p.title) + ', ' + escapeAttr(paintingMeta(p)) + '" loading="lazy">' +
+          '<img src="' + p.image + '" alt="' + escapeAttr(p.title) + ', ' + escapeAttr(paintingMeta(p)) + '">' +
         '</div>' +
         '<div class="painting-label">' +
           '<div class="painting-label-top">' +
@@ -172,6 +143,48 @@
     if (e.key === "ArrowRight") showNext();
   });
 
+  /* Mobile hamburger menu */
+  function openNav() {
+    siteNav.classList.add("is-open");
+    navScrim.classList.add("is-visible");
+    navToggle.classList.add("is-active");
+    navToggle.setAttribute("aria-expanded", "true");
+    document.body.classList.add("nav-open");
+  }
+
+  function closeNav() {
+    siteNav.classList.remove("is-open");
+    navScrim.classList.remove("is-visible");
+    navToggle.classList.remove("is-active");
+    navToggle.setAttribute("aria-expanded", "false");
+    document.body.classList.remove("nav-open");
+  }
+
+  navToggle.addEventListener("click", function () {
+    if (siteNav.classList.contains("is-open")) {
+      closeNav();
+    } else {
+      openNav();
+    }
+  });
+
+  navScrim.addEventListener("click", closeNav);
+
+  // Close the drawer after picking a link, and on Escape
+  siteNav.querySelectorAll("a").forEach(function (link) {
+    link.addEventListener("click", closeNav);
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && siteNav.classList.contains("is-open")) closeNav();
+  });
+
+  // If the window is resized past the mobile breakpoint while the drawer
+  // is open, close it so it doesn't get stuck open on desktop.
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 720 && siteNav.classList.contains("is-open")) closeNav();
+  });
+
   /*
     How many columns to use at the current container width. Edit these
     breakpoints (and the widths in the media queries this mirrors — search
@@ -187,18 +200,19 @@
 
   /*
     True masonry layout pass: bin-packs cards (some 1-column wide, some
-    2-column "large-format" tiles) into whichever column-slot is currently
-    shortest, so nothing is stranded — no CSS-only "dense grid" heuristic
-    can reliably do this part, so it's plain JS math instead.
+    2-column "large-format" tiles, per the "size" field you set in
+    paintings.js) into whichever column-slot is currently shortest, so
+    nothing is stranded — no CSS-only "dense grid" heuristic can reliably
+    do this part, so it's plain JS math instead.
 
-    Two passes:
-      1. Give each card its target width (as a real inline style, while it's
-         still a normal in-flow block) so the browser computes its natural
-         height at that exact width — image aspect ratio and label text
-         both included. Read that height back out.
-      2. Walk cards in order, placing each one into the column-window
-         (of the right span) that's currently shortest, and absolutely
-         position it there.
+    Three batched phases (each phase does all its reads or all its writes
+    together, so the browser only recalculates layout once per phase
+    instead of once per card):
+      1. WRITE — give each card its target width and a normal in-flow
+         position, so the browser can compute its natural height at that
+         width (image aspect ratio + label text both included).
+      2. READ — read all those natural heights back in one pass.
+      3. WRITE — bin-pack and place every card with absolute left/top.
   */
   function layoutMasonry() {
     const containerWidth = grid.clientWidth;
@@ -209,27 +223,23 @@
     const colWidth = (containerWidth - gap * (cols - 1)) / cols;
 
     const cards = Array.from(grid.querySelectorAll(".painting-card"));
+    const spans = cards.map((card) => (card.classList.contains("is-large") ? Math.min(2, cols) : 1));
 
-    // Pass 1: assign real widths, measure natural heights at that width.
-    grid.classList.remove("masonry-ready");
-    const spans = [];
+    // Phase 1 (write): real widths, normal static position.
     cards.forEach((card, i) => {
-      const span = card.classList.contains("is-large") ? Math.min(2, cols) : 1;
-      spans[i] = span;
-      card.style.width = colWidth * span + gap * (span - 1) + "px";
+      card.style.position = "static";
+      card.style.width = colWidth * spans[i] + gap * (spans[i] - 1) + "px";
     });
+
+    // Phase 2 (read): natural heights at those widths.
     const heights = cards.map((card) => card.getBoundingClientRect().height);
 
-    // Pass 2: bin-pack using those measured heights. Place the 2-column
-    // ("large") tiles first, while every column is still roughly level —
-    // if two large tiles were placed in original order interleaved with
-    // small ones, a large tile can get stuck waiting on whichever of its
-    // two columns is currently taller, stranding its other column empty
-    // in the meantime. Placing large tiles first avoids that lock, then
-    // the 1-column tiles simply drop into whichever column is shortest.
-    grid.classList.add("masonry-ready");
+    // Phase 3 (write): bin-pack and place. Large tiles go first, while
+    // columns are still roughly level — placing them in original order
+    // interleaved with small tiles can strand a large tile waiting on
+    // whichever of its two columns is currently taller, leaving the other
+    // column empty in the meantime.
     const colHeights = new Array(cols).fill(0);
-
     const placementOrder = cards.map((_, i) => i).sort((a, b) => spans[b] - spans[a]);
 
     placementOrder.forEach((i) => {
@@ -246,6 +256,7 @@
         }
       }
 
+      card.style.position = "absolute";
       card.style.left = bestStart * (colWidth + gap) + "px";
       card.style.top = bestTop + "px";
 
@@ -255,6 +266,7 @@
       }
     });
 
+    grid.classList.add("masonry-ready");
     grid.style.height = Math.max(...colHeights) - gap + "px";
   }
 

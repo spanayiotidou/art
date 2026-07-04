@@ -20,7 +20,10 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 110px;
+}
 
 body {
   margin: 0;
@@ -105,6 +108,39 @@ button:focus-visible {
 }
 
 .site-nav a:hover { color: var(--ink); }
+
+/* Hamburger button — hidden on desktop, shown only at the mobile breakpoint below */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: 1px solid var(--hairline);
+  cursor: pointer;
+  padding: 0;
+  z-index: 40;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--ink);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Turns into an X when the menu is open */
+.nav-toggle.is-active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.is-active span:nth-child(2) { opacity: 0; }
+.nav-toggle.is-active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.nav-scrim {
+  display: none;
+}
 
 /* ==========================================================================
    HERO
@@ -208,11 +244,12 @@ button:focus-visible {
 }
 
 .gallery-grid.masonry-ready .painting-card {
+  /* Actual position is set inline per-card by layoutMasonry() in script.js;
+     this is just a fallback in case that inline style is ever missing. */
   position: absolute;
   top: 0;
   left: 0;
   margin-bottom: 0;
-  /* width/left/top are all set inline by layoutMasonry() per card */
 }
 
 .painting-frame {
@@ -239,7 +276,6 @@ button:focus-visible {
 .painting-label {
   margin-top: 14px;
   padding: 12px 0 0;
-  border-top: 1px solid var(--hairline);
 }
 
 .painting-label-top {
@@ -327,7 +363,7 @@ button:focus-visible {
   margin: 0 0 14px;
   text-align: justify;
   text-justify: inter-word;
-  line-height: 3.5ch;
+  line-height: 1.75;
 }
 
 .me-image {
@@ -470,7 +506,77 @@ button:focus-visible {
    RESPONSIVE
    ========================================================================== */
 @media (max-width: 720px) {
-  .site-nav { gap: 14px; }
+  /* Hamburger menu */
+  .nav-toggle { display: flex; }
+
+  .site-nav {
+    position: absolute;
+    top: 100%; /* Anchors the menu exactly to the bottom edge of the header */
+    left: 0;
+    width: 100%;
+    height: auto;
+    
+    flex-direction: column;
+    align-items: center; /* Centers the navigation links */
+    gap: 24px;
+    
+    /* Matches the glass-blur effect of the header */
+    background: rgba(21, 23, 26, 0.95);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--hairline);
+    border-left: none; /* Removes the old side-border */
+    
+    /* Setup for the slide-down animation */
+    padding: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    
+    /* Places it visually behind the header border so it slides out cleanly */
+    z-index: -1; 
+  }
+
+  .site-nav.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    padding: 32px 0 40px; /* Expands to give breathing room when open */
+  }
+
+  .site-nav a {
+    font-size: 1rem;
+  }
+
+  .nav-scrim.is-visible {
+    display: none;
+  }
+
+  body.nav-open {
+    overflow: hidden;
+  }
+
+  /* About section: image above text on mobile, single column */
+  .about-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .about-portrait {
+    order: -1;
+    flex: none;
+    width: min(70vw, 280px);
+    margin: 40px 0 8px;
+  }
+
+  .about-content {
+    padding: 0 clamp(10px, 5vw, 24px) 0;
+  }
+
+  .about-content p,
+  .contact-content p {
+    text-align: left;
+  }
 
   .lightbox-inner {
     flex-direction: column;
