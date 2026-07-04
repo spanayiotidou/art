@@ -3,13 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gallery — Selected Works</title>
+<title>Stella Art</title>
 <meta name="description" content="A selection of original paintings, available for viewing and inquiry.">
 
 <!-- Open Graph, edit these when you have a real domain / preview image -->
 <meta property="og:title" content="Gallery — Selected Works">
 <meta property="og:description" content="A selection of original paintings, available for viewing and inquiry.">
 <meta property="og:type" content="website">
+
+<link rel="icon" type="image/jpeg" href="assets/logo.jpeg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,10 +22,13 @@
 <body>
 
 <header class="site-header">
-  <a href="#top" class="wordmark">STELLA PANAYIOTIDOU<span class="wordmark-sub">ART</span></a>
+  <a href="#top" class="wordmark">
+    <img src="assets/logo.jpeg" alt="Stella Panayiotidou Logo" class="header-logo">
+    STELLA<span class="wordmark-sub">ART</span>
+  </a>
   <nav class="site-nav">
-    <a href="#gallery">Gallery</a>
     <a href="#about">About</a>
+    <a href="#gallery">Gallery</a>
     <a href="#contact">Contact</a>
   </nav>
 </header>
@@ -31,9 +36,32 @@
 <main id="top">
 
   <section class="hero">
-    <p class="hero-eyebrow">Selected Works · 2022–2024</p>
-    <h1 class="hero-title">Paintings held<br>in quiet color.</h1>
-    <p class="hero-sub">Original oil, acrylic, and gouache works. Each piece below is available to view in person or by inquiry.</p>
+    <p class="hero-eyebrow">Selected Works · 2018–2026</p>
+    <h1 class="hero-title"><i>The Scent of Light</i></h1>
+    <p class="hero-sub"><i>"Creating a melting illusion in each body through harmonically blended colours, each body has its unique emotional texture, or, its own scent."</i></p>
+  </section>
+
+  <section id="about" class="about-section">
+    <div class="section-heading">
+      <h2>About</h2>
+    </div>
+    <div class="about-layout">
+      <div class="about-content">
+        <p>
+          Stella Panayiotidou is a Cypriot artist exploring the sensory experience of the human body.
+          From an early age, Stella has been deeply interested and inspired by the human essence.
+          How does a human process feelings internally, and how does someone convey themselves through space?
+          Those questions, dominating her thoughts, led her into doing her Bachelor’s degree in Psychology,
+          and her Master’s degree in Neuroscience. The more she learns by academic knowledge, the more curious
+          she gets about the questions which only art can answer. Thus, Stella kept painting over the years of her studies,
+          seeking an answer to those yet unanswered questions. Through her figurative art, she explores the human
+          on a different level of understanding. Creating a melting illusion of each body through harmonically blended colours,
+          each body has its unique emotional texture, or, its own scent. Her figures are almost like in the real world, but always
+          with a hint of curiosity.
+        </p>
+      </div>
+      <img src="assets/me.jpeg" alt="Stella Panayiotidou" class="about-portrait">
+    </div>
   </section>
 
   <section id="gallery" class="gallery-section">
@@ -46,31 +74,24 @@
     </div>
   </section>
 
-  <section id="about" class="about-section">
-    <div class="section-heading">
-      <h2>About</h2>
-    </div>
-    <div class="about-content">
-      <p>I'm a painter working primarily in oil and acrylic, drawn to color relationships built up slowly across many sessions. This site holds a rotating selection of current and past work.</p>
-      <p>Replace this paragraph with your own artist statement — open <code>index.html</code> and edit the text inside the <code>#about</code> section.</p>
-    </div>
-  </section>
-
   <section id="contact" class="contact-section">
     <div class="section-heading">
       <h2>Contact</h2>
     </div>
     <div class="contact-content">
-      <p>Interested in a piece, or want to see more work in person?</p>
-      <a class="contact-email" href="mailto:studio@example.com">studio@example.com</a>
-      <p class="contact-note">Replace this email address, and add social links here if you'd like — this is a plain <code>mailto:</code> link, no backend required.</p>
+      <p>For more information or additional content reach out to:</p>
+      <p>
+        Email: <a class="contact-email" href="mailto:stella@mnpcqs.com">stella@mnpcqs.com</a>
+        <br>
+        Instagram: <a class="contact-email" href="https://www.instagram.com/stellap.art/">@stellap.art</a>
+      </p>
     </div>
   </section>
 
 </main>
 
 <footer class="site-footer">
-  <p>&copy; <span id="year"></span> Ada Marlowe Studio</p>
+  <p>&copy; <span id="year"></span> Stella Panayiotidou Art</p>
 </footer>
 
 <!-- Lightbox / detail view -->
