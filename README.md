@@ -54,7 +54,7 @@ All design tokens are at the top of `css/style.css` under `:root`, e.g.:
 :root {
   --bg:      #15171A;   /* background */
   --ink:     #F2EDE4;   /* text color */
-  --accent:  #B08D57;   /* accent color used for labels, links, highlights */
+  --accent:  #D6A9C9;   /* accent color used for labels, links, highlights */
   ...
 }
 ```
@@ -67,13 +67,3 @@ Just open `index.html` in a browser — everything is static, no server required
 (Some browsers restrict local file access slightly; if images don't load, run
 a tiny local server instead, e.g. `python3 -m http.server` from this folder,
 then visit `http://localhost:8000`.)
-
-## Publishing to GitHub Pages
-
-1. Create a new GitHub repository and push all these files to it.
-2. Go to the repo's **Settings → Pages**.
-3. Under "Build and deployment", set **Source** to "Deploy from a branch",
-   choose your default branch (e.g. `main`) and the `/ (root)` folder.
-4. Save. Your site will be live at `https://<your-username>.github.io/<repo-name>/`
-   within a minute or two.
-5. Optional: add a custom domain later under the same Pages settings.
