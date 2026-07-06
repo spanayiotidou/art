@@ -80,7 +80,7 @@ const PAINTINGS = [
     dimensions: "50 x 40.2 cm",
     status: "available",
     price: "",
-    size: "normal",
+    size: "large",
     image: "paintings/05-Humbled.png"
   },
   {
@@ -124,7 +124,7 @@ const PAINTINGS = [
     dimensions: "30 x 24 cm",
     status: "available",
     price: "",
-    size: "normal",
+    size: "large",
     image: "paintings/09-Golden.png"
   },
   {
@@ -135,8 +135,8 @@ const PAINTINGS = [
     dimensions: "30 x 24 cm",
     status: "available",
     price: "",
-    size: "normal",
-    image: "paintings/10-Rose.png"
+    size: "large",
+    image: "paintings/10-Rose.jpeg"
   },
   {
     id: "11",
@@ -157,7 +157,7 @@ const PAINTINGS = [
     dimensions: "29.8 x 30.2 cm",
     status: "available",
     price: "",
-    size: "normal",
+    size: "large",
     image: "paintings/12-Sweet_Maple.png"
   },
   {
@@ -168,8 +168,8 @@ const PAINTINGS = [
     dimensions: "20 x 40.3 cm",
     status: "available",
     price: "",
-    size: "normal",
-    image: "paintings/13-Vetiver.png"
+    size: "large",
+    image: "paintings/13-Vetiver.jpeg"
   },
   // {
   //   id: "14",
@@ -180,7 +180,7 @@ const PAINTINGS = [
   //   status: "available",
   //   price: "",
   //   size: "normal",
-  //   image: "paintings/13-Vetiver.png"
+  //   image: "paintings/13-Rosemary.png"
   // },
   {
     id: "15",
@@ -201,7 +201,7 @@ const PAINTINGS = [
     dimensions: "22 x 33 cm",
     status: "available",
     price: "",
-    size: "normal",
+    size: "large",
     image: "paintings/16-Caramel.png"
   },
 ];
