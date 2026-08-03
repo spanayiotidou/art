@@ -2,7 +2,7 @@ import os
 from PIL import Image
 
 FOLDER = "paintings"
-MAX_SIZE = (600, 600)  # Maximum width/height in pixels
+MAX_SIZE = (800, 800)  # Maximum width/height in pixels
 
 
 def main() -> int:
