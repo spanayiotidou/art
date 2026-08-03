@@ -31,6 +31,13 @@
     inquire: "Inquire"
   };
 
+  function getSdImage(path) {
+    if (!path) return "";
+    const lastDot = path.lastIndexOf(".");
+    if (lastDot === -1) return path;
+    return path.substring(0, lastDot) + "-SD" + path.substring(lastDot);
+  }
+
   function paintingMeta(p) {
     return [p.medium, p.dimensions, p.year].filter(Boolean).join(" · ");
   }
@@ -51,7 +58,7 @@
 
       card.innerHTML =
         '<div class="painting-frame">' +
-          '<img src="' + p.image + '" alt="' + escapeAttr(p.title) + ', ' + escapeAttr(paintingMeta(p)) + '">' +
+          '<img src="' + getSdImage(p.image) + '" alt="' + escapeAttr(p.title) + ', ' + escapeAttr(paintingMeta(p)) + '" onerror="this.onerror=null;this.src=\'' + escapeAttr(p.image) + '\';">' +
         '</div>' +
         '<div class="painting-label">' +
           '<div class="painting-label-top">' +
@@ -311,10 +318,18 @@
     const imgs = Array.from(grid.querySelectorAll("img"));
     return Promise.all(
       imgs.map((img) => {
-        if (img.complete) return Promise.resolve();
         return new Promise((resolve) => {
-          img.addEventListener("load", resolve, { once: true });
-          img.addEventListener("error", resolve, { once: true });
+          if (img.complete && img.naturalWidth !== 0) return resolve();
+
+          const onLoad = () => resolve();
+          const onError = () => {
+            img.removeEventListener("error", onError);
+            img.addEventListener("load", onLoad, { once: true });
+            img.addEventListener("error", onLoad, { once: true });
+          };
+
+          img.addEventListener("load", onLoad, { once: true });
+          img.addEventListener("error", onError, { once: true });
         });
       })
     );
