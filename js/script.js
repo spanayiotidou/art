@@ -1,11 +1,3 @@
-/*
-  SCRIPT.JS
-  ---------
-  Renders the gallery grid from PAINTINGS (see js/paintings.js) and
-  runs the lightbox (detail view). You shouldn't need to edit this file
-  to add or change paintings — that all happens in paintings.js.
-*/
-
 (function () {
   "use strict";
 
@@ -16,6 +8,10 @@
   const lightboxImage = document.getElementById("lightbox-image");
   const lightboxLabel = document.getElementById("lightbox-label");
   const btnClose = document.getElementById("lightbox-close");
+  const zoomSlider = document.getElementById("lightbox-zoom-slider");
+  const zoomValue = document.getElementById("lightbox-zoom-value");
+  const btnZoomOut = document.getElementById("lightbox-zoom-out");
+  const btnZoomIn = document.getElementById("lightbox-zoom-in");
   const btnPrev = document.getElementById("lightbox-prev");
   const btnNext = document.getElementById("lightbox-next");
 
@@ -24,6 +20,8 @@
   const navScrim = document.getElementById("nav-scrim");
 
   let currentIndex = 0;
+  let baseWidth = 0;
+  let baseHeight = 0;
 
   const STATUS_LABEL = {
     available: "Available",
@@ -81,6 +79,50 @@
     countEl.textContent = PAINTINGS.length + (PAINTINGS.length === 1 ? " work" : " works");
   }
 
+  function captureBaseDimensions() {
+    lightboxImage.style.width = "";
+    lightboxImage.style.height = "";
+    lightboxImage.style.maxWidth = "";
+    lightboxImage.style.maxHeight = "";
+
+    const rect = lightboxImage.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) {
+      baseWidth = rect.width;
+      baseHeight = rect.height;
+    }
+  }
+
+  function setZoom(scale) {
+    let val = parseFloat(scale);
+    val = Math.max(1, Math.min(5, val));
+
+    if (val > 1) {
+      if (!baseWidth || !baseHeight) {
+        captureBaseDimensions();
+      }
+      if (baseWidth && baseHeight) {
+        lightboxImage.style.width = (baseWidth * val) + "px";
+        lightboxImage.style.height = (baseHeight * val) + "px";
+        lightboxImage.style.maxWidth = "none";
+        lightboxImage.style.maxHeight = "none";
+      }
+    } else {
+      lightboxImage.style.width = "";
+      lightboxImage.style.height = "";
+      lightboxImage.style.maxWidth = "";
+      lightboxImage.style.maxHeight = "";
+    }
+
+    if (zoomSlider) zoomSlider.value = val;
+    if (zoomValue) zoomValue.textContent = Math.round(val * 100) + "%";
+    lightboxImage.style.cursor = val > 1 ? "zoom-out" : "zoom-in";
+  }
+
+  function toggleZoom() {
+    const currentScale = parseFloat(zoomSlider ? zoomSlider.value : 1);
+    setZoom(currentScale > 1 ? 1 : 2);
+  }
+
   function openLightbox(index) {
     currentIndex = index;
     updateLightbox();
@@ -90,18 +132,27 @@
   }
 
   function closeLightbox() {
+    setZoom(1);
     lightbox.classList.remove("is-open");
     lightbox.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
   }
 
   function updateLightbox() {
+    baseWidth = 0;
+    baseHeight = 0;
+    setZoom(1);
+
     const p = PAINTINGS[currentIndex];
     if (!p) return;
 
     const statusKey = (p.status || "").toLowerCase();
     const statusLabel = STATUS_LABEL[statusKey] || p.status || "";
     const showPrice = (statusKey === "available" || statusKey === "sold") && p.price;
+
+    lightboxImage.onload = function () {
+      captureBaseDimensions();
+    };
 
     lightboxImage.src = p.image;
     lightboxImage.alt = p.title + ", " + paintingMeta(p);
@@ -135,9 +186,31 @@
     return escapeHtml(str).replace(/"/g, "&quot;");
   }
 
+  // Lightbox event listeners
   btnClose.addEventListener("click", closeLightbox);
+  lightboxImage.addEventListener("click", toggleZoom);
   btnPrev.addEventListener("click", showPrev);
   btnNext.addEventListener("click", showNext);
+
+  if (zoomSlider) {
+    zoomSlider.addEventListener("input", function (e) {
+      setZoom(e.target.value);
+    });
+  }
+
+  if (btnZoomOut) {
+    btnZoomOut.addEventListener("click", function () {
+      const currentScale = parseFloat(zoomSlider ? zoomSlider.value : 1);
+      setZoom(currentScale - 0.25);
+    });
+  }
+
+  if (btnZoomIn) {
+    btnZoomIn.addEventListener("click", function () {
+      const currentScale = parseFloat(zoomSlider ? zoomSlider.value : 1);
+      setZoom(currentScale + 0.25);
+    });
+  }
 
   lightbox.addEventListener("click", function (e) {
     if (e.target === lightbox) closeLightbox();
@@ -177,7 +250,6 @@
 
   navScrim.addEventListener("click", closeNav);
 
-  // Close the drawer after picking a link, and on Escape
   siteNav.querySelectorAll("a").forEach(function (link) {
     link.addEventListener("click", closeNav);
   });
@@ -186,18 +258,14 @@
     if (e.key === "Escape" && siteNav.classList.contains("is-open")) closeNav();
   });
 
-  // If the window is resized past the mobile breakpoint while the drawer
-  // is open, close it so it doesn't get stuck open on desktop.
   window.addEventListener("resize", function () {
     if (window.innerWidth > 720 && siteNav.classList.contains("is-open")) closeNav();
+    if (lightbox.classList.contains("is-open")) {
+      captureBaseDimensions();
+      setZoom(zoomSlider ? zoomSlider.value : 1);
+    }
   });
 
-  /*
-    How many columns to use at the current container width. Edit these
-    breakpoints (and the widths in the media queries this mirrors — search
-    style.css for "masonry breakpoints" — are just for the no-JS fallback,
-    this is the one that actually matters) to make the grid tighter/looser.
-  */
   function getColumnCount(containerWidth) {
     if (containerWidth < 640) return 2;
     if (containerWidth < 1000) return 3;
@@ -205,35 +273,16 @@
     return 5;
   }
 
-  /*
-    True masonry layout pass: bin-packs cards (some 1-column wide, some
-    2-column "large-format" tiles, per the "size" field you set in
-    paintings.js) into whichever column-slot is currently shortest, so
-    nothing is stranded — no CSS-only "dense grid" heuristic can reliably
-    do this part, so it's plain JS math instead.
-
-    Three batched phases (each phase does all its reads or all its writes
-    together, so the browser only recalculates layout once per phase
-    instead of once per card):
-      1. WRITE — give each card its target width and a normal in-flow
-         position, so the browser can compute its natural height at that
-         width (image aspect ratio + label text both included).
-      2. READ — read all those natural heights back in one pass.
-      3. WRITE — bin-pack and place every card with absolute left/top.
-  */
   function layoutMasonry() {
     const rawContainerWidth = grid.clientWidth;
     if (!rawContainerWidth) return;
 
-    // Detect if we are on a mobile device
     const isMobile = window.innerWidth <= 720;
     const computedStyle = getComputedStyle(grid);
 
-    // Only apply CSS padding offsets on mobile. On desktop, this stays 0.
     const paddingLeft = isMobile ? (parseFloat(computedStyle.paddingLeft) || 0) : 0;
     const paddingRight = isMobile ? (parseFloat(computedStyle.paddingRight) || 0) : 0;
 
-    // Usable width for the grid math
     const containerWidth = rawContainerWidth - paddingLeft - paddingRight;
     if (containerWidth <= 0) return;
 
@@ -246,43 +295,33 @@
 
     const spans = cards.map((card) => (card.classList.contains("is-large") ? Math.min(2, cols) : 1));
 
-    // Calculate Hero width (75% desktop, 100% mobile) and center it
     const heroWidth = !isMobile ? containerWidth * 0.8 : containerWidth;
     const heroLeft = paddingLeft + (containerWidth - heroWidth) / 2;
 
-    // Phase 1 (write): real widths, normal static position.
     cards.forEach((card, i) => {
       card.style.position = "static";
       if (i === 0) {
-        card.style.width = heroWidth + "px"; // First item gets Hero width
+        card.style.width = heroWidth + "px";
       } else {
         card.style.width = colWidth * spans[i] + gap * (spans[i] - 1) + "px";
       }
     });
 
-    // Phase 2 (read): natural heights at those widths.
     const heights = cards.map((card) => card.getBoundingClientRect().height);
-
-    // Phase 3 (write): bin-pack and place.
     const colHeights = new Array(cols).fill(0);
 
-    // --- NEW: Place the Hero painting (index 0) first ---
     const heroCard = cards[0];
     heroCard.style.position = "absolute";
     heroCard.style.left = heroLeft + "px";
     heroCard.style.top = "0px";
 
-    // Push all columns down so the rest of the grid starts below the hero painting
     const heroBottom = heights[0] + gap;
     colHeights.fill(heroBottom);
 
-    // --- ORIGINAL LOGIC: Sort and place the rest of the gallery ---
-    // Create an order array for every card EXCEPT the first one
     const restIndices = [];
     for (let i = 1; i < cards.length; i++) {
       restIndices.push(i);
     }
-    // Sort the remaining cards exactly like your original code (large tiles first)
     const placementOrder = restIndices.sort((a, b) => spans[b] - spans[a]);
 
     placementOrder.forEach((i) => {
@@ -300,7 +339,6 @@
       }
 
       card.style.position = "absolute";
-      // Add paddingLeft so mobile clears the edge, but desktop remains exactly as it was
       card.style.left = paddingLeft + (bestStart * (colWidth + gap)) + "px";
       card.style.top = bestTop + "px";
 
