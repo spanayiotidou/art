@@ -54,7 +54,7 @@
 
       const statusKey = (p.status || "").toLowerCase();
       const statusLabel = STATUS_LABEL[statusKey] || p.status || "";
-      const showPrice = statusKey === "available" && p.price;
+      const showPrice = (statusKey === "available" || statusKey === "sold") && p.price;
 
       card.innerHTML =
         '<div class="painting-frame">' +
@@ -101,7 +101,7 @@
 
     const statusKey = (p.status || "").toLowerCase();
     const statusLabel = STATUS_LABEL[statusKey] || p.status || "";
-    const showPrice = statusKey === "available" && p.price;
+    const showPrice = (statusKey === "available" || statusKey === "sold") && p.price;
 
     lightboxImage.src = p.image;
     lightboxImage.alt = p.title + ", " + paintingMeta(p);

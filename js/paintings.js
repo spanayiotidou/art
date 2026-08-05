@@ -34,8 +34,8 @@ const PAINTINGS = [
     year: "2019",
     medium: "Acrylic on canvas",
     dimensions: "100 x 120 cm",
-    status: "available",
-    price: "",
+    status: "sold",
+    price: "€700",
     size: "large",
     image: "paintings/01-Light.png"
   },
@@ -47,7 +47,7 @@ const PAINTINGS = [
   //   medium: "Acrylic on canvas",
   //   dimensions: "100 x 120 cm",
   //   status: "available",
-  //   price: "",
+  //   price: "€700",
   //   size: "large",
   //   image: "paintings/Light.JPG"
   // },
@@ -58,7 +58,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "90 x 65.3 cm",
     status: "available",
-    price: "",
+    price: "€500",
     size: "large",
     image: "paintings/Vicky.JPG"
   },
@@ -69,7 +69,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "100 x 100.5 cm",
     status: "available",
-    price: "",
+    price: "€420",
     size: "large",
     image: "paintings/Cinnamon.JPG"
   },
@@ -80,7 +80,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "100 x 70 cm",
     status: "available",
-    price: "",
+    price: "€400",
     size: "large",
     image: "paintings/Change.JPG"
   },
@@ -91,7 +91,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "50 x 40.2 cm",
     status: "available",
-    price: "",
+    price: "€180",
     size: "large",
     image: "paintings/Humbled.JPG"
   },
@@ -102,7 +102,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "122 x  91.5 cm",
     status: "available",
-    price: "",
+    price: "€450",
     size: "large",
     image: "paintings/Crude.JPG"
   },
@@ -113,7 +113,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "100 x 50 cm",
     status: "available",
-    price: "",
+    price: "€230",
     size: "large",
     image: "paintings/Dry_Lavender.JPG"
   },
@@ -124,7 +124,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "60 x 50 cm",
     status: "available",
-    price: "",
+    price: "€140",
     size: "large",
     image: "paintings/In_My_Feelings.JPG"
   },
@@ -135,7 +135,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "30 x 24 cm",
     status: "available",
-    price: "",
+    price: "€110",
     size: "large",
     image: "paintings/Golden.JPG"
   },
@@ -145,8 +145,8 @@ const PAINTINGS = [
     year: "2022",
     medium: "Acrylic on canvas",
     dimensions: "30 x 24 cm",
-    status: "available",
-    price: "",
+    status: "sold",
+    price: "€120",
     size: "large",
     image: "paintings/Matilda.JPG"
   },
@@ -157,7 +157,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "30 x 24 cm",
     status: "available",
-    price: "",
+    price: "€100",
     size: "large",
     image: "paintings/Rose.JPG"
   },
@@ -168,7 +168,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "100 x 73 cm",
     status: "available",
-    price: "",
+    price: "€600",
     size: "large",
     image: "paintings/Cherry.JPG"
   },
@@ -179,7 +179,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "29.8 x 30.2 cm",
     status: "available",
-    price: "",
+    price: "€100",
     size: "large",
     image: "paintings/Sweet_Maple.JPG"
   },
@@ -190,7 +190,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "20 x 40.3 cm",
     status: "available",
-    price: "",
+    price: "€100",
     size: "large",
     image: "paintings/Vetiver.JPG"
   },
@@ -201,7 +201,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "40 x 50.5 cm",
     status: "available",
-    price: "",
+    price: "€150",
     size: "large",
     image: "paintings/Daisy.JPG"
   },
@@ -212,7 +212,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "22 x 33 cm",
     status: "available",
-    price: "",
+    price: "€100",
     size: "large",
     image: "paintings/Caramel.JPG"
   },
@@ -223,7 +223,7 @@ const PAINTINGS = [
     medium: "Mixed-media on canvas",
     dimensions: "40 x 30 cm",
     status: "available",
-    price: "",
+    price: "€120",
     size: "large",
     image: "paintings/Sun_Exclusive.JPG"
   },
@@ -234,7 +234,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "50 x 35 cm",
     status: "available",
-    price: "",
+    price: "€120",
     size: "large",
     image: "paintings/Sandalwood.JPG"
   },
@@ -245,7 +245,7 @@ const PAINTINGS = [
     medium: "Charcoal on canvas",
     dimensions: "30 x 20 cm",
     status: "available",
-    price: "",
+    price: "€70",
     size: "large",
     image: "paintings/Charcoal.JPG"
   },
