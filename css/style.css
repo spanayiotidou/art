@@ -409,12 +409,12 @@ button:focus-visible {
 /* Outer fixed image container */
 .lightbox-image-container {
   position: relative;
-  flex: 1 1 auto;
+  flex: 1 1 0%;
   min-width: 0;
-  height: 78vh;
-  display: flex;
+  height: 75vh;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   overflow: hidden;
   border-radius: 4px;
 }
