@@ -79,7 +79,7 @@ const PAINTINGS = [
     year: "2020",
     medium: "Acrylic on canvas",
     dimensions: "100 x 70 cm",
-    status: "available",
+    status: "sold",
     price: "€400",
     size: "large",
     image: "paintings/Change.JPG"
@@ -167,7 +167,7 @@ const PAINTINGS = [
     year: "2023",
     medium: "Acrylic on canvas",
     dimensions: "100 x 73 cm",
-    status: "available",
+    status: "sold",
     price: "€600",
     size: "large",
     image: "paintings/Cherry.JPG"
@@ -211,13 +211,35 @@ const PAINTINGS = [
     year: "2025",
     medium: "Acrylic on canvas",
     dimensions: "22 x 33 cm",
-    status: "available",
+    status: "sold",
     price: "€100",
     size: "large",
     image: "paintings/Caramel.JPG"
   },
   {
     id: "17",
+    title: "\"Big Caramel\"",
+    year: "2026",
+    medium: "Acrylic on canvas",
+    dimensions: "60 x 81.5 cm",
+    status: "available",
+    price: "€310",
+    size: "large",
+    image: "paintings/Big_Caramel.JPG"
+  },
+  {
+    id: "18",
+    title: "\"Rosemary\"",
+    year: "2026",
+    medium: "Acrylic on canvas",
+    dimensions: "70 x 50 cm",
+    status: "available",
+    price: "€340",
+    size: "large",
+    image: "paintings/Rosemary.JPG"
+  },
+  {
+    id: "19",
     title: "\"Sun Exclusive\"",
     year: "2026",
     medium: "Mixed-media on canvas",
@@ -228,18 +250,18 @@ const PAINTINGS = [
     image: "paintings/Sun_Exclusive.JPG"
   },
   {
-    id: "18",
+    id: "20",
     title: "\"Sandalwood\"",
     year: "2022",
     medium: "Acrylic on canvas",
     dimensions: "50 x 35 cm",
     status: "available",
     price: "€120",
-    size: "large",
+    size: "sold",
     image: "paintings/Sandalwood.JPG"
   },
   {
-    id: "19",
+    id: "21",
     title: "\"Charcoal\"",
     year: "2023",
     medium: "Charcoal on canvas",
