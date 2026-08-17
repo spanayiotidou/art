@@ -255,9 +255,9 @@ const PAINTINGS = [
     year: "2022",
     medium: "Acrylic on canvas",
     dimensions: "50 x 35 cm",
-    status: "available",
+    status: "sold",
     price: "€120",
-    size: "sold",
+    size: "large",
     image: "paintings/Sandalwood.JPG"
   },
   {
