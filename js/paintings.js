@@ -113,7 +113,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "100 x 50 cm",
     status: "available",
-    price: "€230",
+    price: "€250",
     size: "large",
     image: "paintings/Dry_Lavender.JPG"
   },
@@ -201,7 +201,7 @@ const PAINTINGS = [
     medium: "Acrylic on canvas",
     dimensions: "40 x 50.5 cm",
     status: "available",
-    price: "€150",
+    price: "€120",
     size: "large",
     image: "paintings/Daisy.JPG"
   },
