@@ -141,17 +141,6 @@ const PAINTINGS = [
   },
   {
     id: "10",
-    title: "\"Matilda\"",
-    year: "2022",
-    medium: "Acrylic on canvas",
-    dimensions: "30 x 24 cm",
-    status: "sold",
-    price: "€120",
-    size: "large",
-    image: "paintings/Matilda.JPG"
-  },
-  {
-    id: "11",
     title: "\"Rose\"",
     year: "2022",
     medium: "Acrylic on canvas",
@@ -162,7 +151,7 @@ const PAINTINGS = [
     image: "paintings/Rose.JPG"
   },
   {
-    id: "12",
+    id: "11",
     title: "\"Cherry\"",
     year: "2023",
     medium: "Acrylic on canvas",
@@ -173,7 +162,7 @@ const PAINTINGS = [
     image: "paintings/Cherry.JPG"
   },
   {
-    id: "13",
+    id: "12",
     title: "\"Sweet Maple\"",
     year: "2026",
     medium: "Acrylic on canvas",
@@ -184,7 +173,7 @@ const PAINTINGS = [
     image: "paintings/Sweet_Maple.JPG"
   },
   {
-    id: "14",
+    id: "13",
     title: "\"Vetiver\"",
     year: "2026",
     medium: "Acrylic on canvas",
@@ -195,7 +184,7 @@ const PAINTINGS = [
     image: "paintings/Vetiver.JPG"
   },
   {
-    id: "15",
+    id: "14",
     title: "\"Daisy\"",
     year: "2026",
     medium: "Acrylic on canvas",
@@ -206,7 +195,7 @@ const PAINTINGS = [
     image: "paintings/Daisy.JPG"
   },
   {
-    id: "16",
+    id: "15",
     title: "\"Caramel\"",
     year: "2025",
     medium: "Acrylic on canvas",
@@ -217,29 +206,7 @@ const PAINTINGS = [
     image: "paintings/Caramel.JPG"
   },
   {
-    id: "17",
-    title: "\"Big Caramel\"",
-    year: "2026",
-    medium: "Acrylic on canvas",
-    dimensions: "60 x 81.5 cm",
-    status: "available",
-    price: "€310",
-    size: "large",
-    image: "paintings/Big_Caramel.JPG"
-  },
-  {
-    id: "18",
-    title: "\"Rosemary\"",
-    year: "2026",
-    medium: "Acrylic on canvas",
-    dimensions: "70 x 50 cm",
-    status: "available",
-    price: "€340",
-    size: "large",
-    image: "paintings/Rosemary.JPG"
-  },
-  {
-    id: "19",
+    id: "16",
     title: "\"Sun Exclusive\"",
     year: "2026",
     medium: "Mixed-media on canvas",
@@ -250,7 +217,7 @@ const PAINTINGS = [
     image: "paintings/Sun_Exclusive.JPG"
   },
   {
-    id: "20",
+    id: "17",
     title: "\"Sandalwood\"",
     year: "2022",
     medium: "Acrylic on canvas",
@@ -261,7 +228,7 @@ const PAINTINGS = [
     image: "paintings/Sandalwood.JPG"
   },
   {
-    id: "21",
+    id: "18",
     title: "\"Charcoal\"",
     year: "2023",
     medium: "Charcoal on canvas",
@@ -270,5 +237,38 @@ const PAINTINGS = [
     price: "€70",
     size: "large",
     image: "paintings/Charcoal.JPG"
+  },
+  {
+    id: "19",
+    title: "\"Matilda\"",
+    year: "2022",
+    medium: "Acrylic on canvas",
+    dimensions: "30 x 24 cm",
+    status: "sold",
+    price: "€120",
+    size: "large",
+    image: "paintings/Matilda.JPG"
+  },
+  {
+    id: "20",
+    title: "\"Rosemary\"",
+    year: "2026",
+    medium: "Acrylic on canvas",
+    dimensions: "70 x 50 cm",
+    status: "available",
+    price: "€340",
+    size: "large",
+    image: "paintings/Rosemary.JPG"
+  },
+  {
+    id: "21",
+    title: "\"Big Caramel\"",
+    year: "2026",
+    medium: "Acrylic on canvas",
+    dimensions: "60 x 81.5 cm",
+    status: "available",
+    price: "€310",
+    size: "large",
+    image: "paintings/Big_Caramel.JPG"
   },
 ];
